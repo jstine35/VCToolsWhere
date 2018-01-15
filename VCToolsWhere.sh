@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+# Latest version can probably be found here:
+#    https://github.com/jstine35/VCToolsWhere
+
+# TODO: auto-detect host 32 bit systems.
+# TODO: make target configurable via CLI.
 
 host=x64
 target=x64
