@@ -84,14 +84,14 @@ if [[ ! -f "$vswherepath" ]]; then
 fi
 
 if [[ ! -f "$vswherepath" ]]; then
-    2>&1 echo "ERROR: Unable to discover the location of vswhere.exe"
-    2>&1 echo ""
-    2>&1 echo "This error may mean that you do not have Visual Studio installed, or that your"
-    2>&1 echo "installed version is not supported.  You can manually download and install a copy"
-    2>&1 echo "of vswhere.exe from either Microsoft/GitHub, or by using Chocolatey package manager:"
-    2>&1 echo ""
-    2>&1 echo "   $ cinst vswhere"
-    2>&1 echo ""
+    >&2 echo "ERROR: Unable to discover the location of vswhere.exe"
+    >&2 echo ""
+    >&2 echo "This error may mean that you do not have Visual Studio installed, or that your"
+    >&2 echo "installed version is not supported.  You can manually download and install a copy"
+    >&2 echo "of vswhere.exe from either Microsoft/GitHub, or by using Chocolatey package manager:"
+    >&2 echo ""
+    >&2 echo "   $ cinst vswhere"
+    >&2 echo ""
     exit 5
 fi
 
@@ -101,11 +101,11 @@ vspath="$(readlink -f "$(cygpath "$vspath_msw")")"
 vstoolsversionfile="$vspath/VC/Auxiliary/Build/Microsoft.VCToolsVersion.default.txt"
 
 if [[ ! -e "$vstoolsversionfile" ]]; then
-    2>&1 echo "ERROR: VS Tools Version file was not found."
-    2>&1 echo ""
-    2>&1 echo "Expected to find: $vstoolsversionfile"
-    2>&1 echo "This error may mean that your Visual Studio doesn't have the VC Toolset"
-    2>&1 echo "selected for install somehow."
+    >&2 echo "ERROR: VS Tools Version file was not found."
+    >&2 echo ""
+    >&2 echo "Expected to find: $vstoolsversionfile"
+    >&2 echo "This error may mean that your Visual Studio doesn't have the VC Toolset"
+    >&2 echo "selected for install somehow."
     exit 5
 fi
 
