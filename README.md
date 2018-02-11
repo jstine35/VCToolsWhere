@@ -13,7 +13,7 @@ is the same for all variety of Visual Studio distributions -- Community, Pro, En
 ## How to run `.sh` file?
 It's a Bash shell script.  Fully-functional **GNU CoreUtils** is available by installing
 [Git for Windows](https://gitforwindows.org), which is something almost all Windows developers should have
-installed.  See also [my patch installer](https://github.com/jstine35/ShAssocCheck/releases) which fixes a
+installed.  See also [my ShAssocFix patch installer](https://github.com/jstine35/ShAssocCheck/releases) which fixes a
 known issue in Git for Windows `.sh` file association.
 
 ### Relationship to VSWhere.exe
