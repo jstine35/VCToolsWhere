@@ -1,6 +1,10 @@
 #!/bin/bash
-
+#
 # Main purpose of this script is to encapsulate evaluation of %ProgramFiles(x86)% from an msys environment.
+#
+# Latest version can probably be found here:
+#    https://github.com/jstine35/VCToolsWhere
+#
 
 CYGPATH_AS_WIN=0
 RUN_CUSTOM_SWITCH_MODE=0
