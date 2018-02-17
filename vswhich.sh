@@ -4,6 +4,8 @@
 
 CYGPATH_AS_WIN=0
 RUN_CUSTOM_SWITCH_MODE=0
+vswhere_property="installationPath"
+skip_cygpath=0
 
 DIAGNOSTIC=0
 SHOW_HELP=0
@@ -15,6 +17,15 @@ key="$1"
 case $key in
     --diagnostic|--diag)
     DIAGNOSTIC=1
+    shift
+    ;;
+    --install-path)
+    vswhere_property="installationPath"
+    shift
+    ;;
+    --install-version)
+    vswhere_property="installationVersion"
+	skip_cygpath=1
     shift
     ;;
     -w|--win|--windows)
@@ -86,12 +97,12 @@ if [[ "$RUN_CUSTOM_SWITCH_MODE" -eq "1" ]]; then
     exit 0
 fi
 
-vspath_msw="$("$vswherepath" -property installationPath)"
+vspath_msw="$("$vswherepath" -latest -property $vswhere_property)" || exit 2
 
 if [[ "$CYGPATH_AS_WIN" -eq "1" ]]; then
     echo $vspath_msw
     exit 0
 fi
 
-[ "$DIAGNOSTIC" -eq "1" ] && diagecho "(diag) vswhere.exe returned: $vspath_msw"
-readlink -f "$vspath_msw"
+[[ "$DIAGNOSTIC"   -eq "1" ]] && diagecho "(diag) vswhere.exe returned: $vspath_msw"
+[[ "$skip_cygpath" -eq "0" ]] && cygpath "$vspath_msw" || echo "$vspath_msw"
