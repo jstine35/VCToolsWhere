@@ -28,42 +28,42 @@ do
 key="$1"
 case $key in
     --diagnostic|--diag)
-    DIAGNOSTIC=1
-    diag_switch=--diag
-    shift
+        DIAGNOSTIC=1
+        diag_switch=--diag
+        shift
     ;;
     --toolsver)
-    SHOW_TOOLS_VERSION_ONLY=1
-    shift
+        SHOW_TOOLS_VERSION_ONLY=1
+        shift
     ;;
     -w|--win|--windows)
-    CYGPATH_AS_WIN=1
-    shift
+        CYGPATH_AS_WIN=1
+        shift
     ;;
     -u|--unix)
-    CYGPATH_AS_WIN=0
-    shift
+        CYGPATH_AS_WIN=0
+        shift
     ;;
     --target=*)
-    dir_target="${key#*=}"
-    shift
+        dir_target="${key#*=}"
+        shift
     ;;
     --host=*)
-    dir_host="${key#*=}"
-    shift
+        dir_host="${key#*=}"
+        shift
     ;;
     --target|--host)
-    >&2 echo "Switch $key requires a parameter assignment."
-    >&2 echo "Example: $key=x64"
-    CLI_ERROR_ABORT=1
+        >&2 echo "Switch $key requires a parameter assignment."
+        >&2 echo "Example: $key=x64"
+        CLI_ERROR_ABORT=1
     ;;
     --help)
-    SHOW_HELP=1
-    shift
+        SHOW_HELP=1
+        shift
     ;;
     *)    # unknown option
-    POSITIONAL+=("$1") # save it in an array for later
-    shift # past argument
+        POSITIONAL+=("$1") # save it in an array for later
+        shift # past argument
     ;;
 esac
 done

@@ -20,42 +20,42 @@ while [[ $# -gt 0 ]]; do
 key="$1"
 case $key in
     --diagnostic|--diag)
-    DIAGNOSTIC=1
-    shift
+        DIAGNOSTIC=1
+        shift
     ;;
     --install-path)
-    vswhere_property="installationPath"
-    shift
+        vswhere_property="installationPath"
+        shift
     ;;
     --install-version)
-    vswhere_property="installationVersion"
-	skip_cygpath=1
-    shift
+        vswhere_property="installationVersion"
+        skip_cygpath=1
+        shift
     ;;
     -w|--win|--windows)
-    CYGPATH_AS_WIN=1
-    shift
+        CYGPATH_AS_WIN=1
+        shift
     ;;
     -u|--unix)
-    CYGPATH_AS_WIN=0
-    shift
+        CYGPATH_AS_WIN=0
+        shift
     ;;
     --help)
-    SHOW_HELP=1
-    shift
+        SHOW_HELP=1
+        shift
     ;;
     --)
-    RUN_CUSTOM_SWITCH_MODE=1
-    shift
-    POSITIONAL+=("$@") # save it in an array for later
-    shift $#
-    ;;
-    *)    # unknown option
-    >&2 echo "Unknown option '$key'"
-    >&2 echo "Use -- to pass options into vswhere.exe, ex:"
-    >&2 echo "  $ vswhere.sh -- -property installationPath"
-    #POSITIONAL+=("$1") # save it in an array for later
-    shift # past argument
+        RUN_CUSTOM_SWITCH_MODE=1
+        shift
+        POSITIONAL+=("$@") # save it in an array for later
+        shift $#
+        ;;
+        *)    # unknown option
+        >&2 echo "Unknown option '$key'"
+        >&2 echo "Use -- to pass options into vswhere.exe, ex:"
+        >&2 echo "  $ vswhere.sh -- -property installationPath"
+        #POSITIONAL+=("$1") # save it in an array for later
+        shift # past argument
     ;;
 esac
 done
