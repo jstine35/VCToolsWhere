@@ -64,10 +64,32 @@ diagecho() { >&2 echo $@; }
 vspath="$("$mydir/vswhich.sh" $diag_switch --install-path)"
 vswhich_err="$?"
 
-if [[ -n "$vspath" && "$vswhich_err" -eq "0" ]]; then
-    vsver=$("$mydir/vswhich.sh" --install-version | cut -d'.' -f1)
-    msbuild_path=$(readlink -f "$vspath/MSBuild/${vsver}.0/bin")
+# As of VS 2019 msbuild reports itself as v16 but is installed into the 'MSBuild/Current' directory,
+# with the v16 directory non-existent.
+#
+# Sigh. Reminds me of the VS2003 days, when msbuild had no version-controlled directory. History repeats.
+# Here's what you're supposed to do: install it side-by-side with itself in two locations (since windows
+# sucks at symlinks), one location at "default" and one at "16.0".  Now we can use it as the default and also
+# explicitly when needed, without complicating the build system. Yes it uses some MBs of disk space. No, no
+# one effing cares anymore about 100MB of disk space. We all have 4 versions of MSVC and a half dozen Windows 10
+# SDKs installed as it is, and those are all much larger.
+#
+# But instead microsoft will keep switching between a generic install location and a strongly versioned one
+# because in their infinitely narrow lack-of-wisdom they don't want to "waste" a couple megs of disk space.
 
+if [[ -n "$vspath" && "$vswhich_err" -eq "0" ]]; then
+    # Step 1. assume "MSBuild/Current" is the best choice
+    # Step 2. fall back on explicit version location provided by vswhere.exe, which actually will clearly
+    #         change every visual studio because microsoft is less capable of intelligent design than 
+    #         a nakedd RNA chain bombarded by direct sun radiation trying to form its own life (a consequence
+	#         of their level of succsess making it unnecessary to be competitively intelligent).
+    #    (in 200 million years micorsoft might finally stop repeating the same dumb mistakes over and over.)
+
+    msbuild_path=$(readlink -f "$vspath/MSBuild/Current/bin")
+    if [[ ! -e "$msbuild_path/msbuild.exe" ]]; then
+        vsver=$("$mydir/vswhich.sh" --install-version | cut -d'.' -f1)
+        msbuild_path=$(readlink -f "$vspath/MSBuild/${vsver}.0/bin")
+    fi
 elif [[ -z "$vspath" || "$vswhich_err" -eq "1" ]]; then
     # vswhich.sh failed due to vswhere.exe not found, or no visual studio products found
     # So let's look for legacy visual studio...
@@ -75,6 +97,7 @@ elif [[ -z "$vspath" || "$vswhich_err" -eq "1" ]]; then
     # doing registry inspection.  But then 99.995% case is that it's installed into:
     #    %PROGRAMFILES(X86)%/MSBuild/xx.x/
     # ... where the xx.x are version numbers.
+
 
     [ "$DIAGNOSTIC" -eq "1" ] && diagecho "(diag) vswhere.exe not found! Fall back on legacy MSVC 2010->2015 check!"
     PROGRAMFILESX86=${PROGRAMFILESX86:-$(cmd //C echo "%ProgramFiles(x86)%" 2>/dev/null)}
